@@ -5,6 +5,9 @@
 This project is an image processing application implemented in Python with a GUI.
 It includes the implementation of various filters, edge detectors, and segmentation techniques.
 
+## Demo
+https://github.com/OsamaRab3/Image-Processing/assets/159753803/9bd1338b-b100-484e-aa51-1528a6451eed
+
 ## Features
 - **Filters**: 
   - Low Pass Filter (LPF)
