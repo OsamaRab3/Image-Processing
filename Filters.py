@@ -1,75 +1,29 @@
-import cv2
-import numpy as np
-from tkinter import *
-from tkinter import filedialog
-from PIL import Image, ImageTk
-from matplotlib import pyplot as plt
+from Main_page import *
 
-class imag_processing:
+class Filter(imag_processing):
     def __init__(self, root):
-        self.root = root
+        self.root=root
         self.root.title("Image Processing")
-        self.image = None 
-        self.main_page()
-        
-    def main_page(self):
-        self.load_image_button = Button(
-                self.root,
-                text="Load Image",
-                font=("Arial", 10, "bold"),
-                command=self.load_image,
-        )
-        self.load_image_button.place(x=10,y=10)
-        
-        self.image_label = Label(self.root)
-        self.image_label.pack()
-        operations = {
-            "LPF": self.apply_lpf,
-            "HPF": self.apply_hpf,
-            "Mean Filter": self.apply_mean_filter,
-            "Median Filter": self.apply_median_filter
-        }
-
-        y_offset=50
-        for operation_name, operation_func in operations.items():
-            button = Button(
-                self.root,
-                text=operation_name,
-                font=("Arial", 10, "bold"),
-                command=operation_func,
-            )
-            button.place(x=10, y=y_offset)
-            y_offset += 30 
-
-        
-    def load_image(self):
-        file_path = filedialog.askopenfilename(filetypes=[("Image Files", "*.png;*.jpg;*.jpeg")])
-        if file_path:
-            self.image = Image.open(file_path)
-            photo = ImageTk.PhotoImage(self.image)
-            self.image_label.configure(image=photo)
-            self.image_label.image = photo  # Keep a reference
-        else:
-            print("No file selected.")
+        self.Page()
 
     def apply_lpf(self):
-        # Load the image
         if self.image is not None:
             image_np = np.array(self.image)
-
             # Apply Gaussian blur as a low-pass filter
             blurred_image = cv2.GaussianBlur(image_np, (5, 5), 0)
 
-            # plt.figure(figsize=(12, 12))
+            # Convert the image back to PIL format
+            pil_image = Image.fromarray(cv2.cvtColor(blurred_image, cv2.COLOR_BGR2RGB))
 
-            # plt.subplot(1, 2, 2)
-            plt.imshow(cv2.cvtColor(blurred_image, cv2.COLOR_BGR2RGB))
-            plt.title('Lowpass Filtered Image')
-            plt.axis('off')
-            plt.show()
+            # Convert the PIL image to a Tkinter-compatible format
+            photo = ImageTk.PhotoImage(pil_image)
+
+            # Configure the image label to display the new image
+            self.image_label.configure(image=photo)
+            self.image_label.image = photo  # Keep a reference to prevent garbage collection
         else:
             print("Please load an image first.")
-            
+    
     def apply_hpf(self):
         if self.image is not None:
             # Convert the image to a numpy array
@@ -84,26 +38,31 @@ class imag_processing:
             # Subtract the blurred image from the grayscale image to obtain the high-pass filtered image
             hpf_image = cv2.subtract(gray_image, blurred_image)
 
-            plt.imshow(hpf_image, cmap='gray')
-            plt.title('High Pass Filtered Image')
-            plt.axis('off')
-            plt.show()
+            # Convert the high-pass filtered image to a PIL Image
+            pil_image = Image.fromarray(hpf_image)
+
+            # Convert the PIL Image to a Tkinter PhotoImage
+            photo = ImageTk.PhotoImage(pil_image)
+
+            # Configure the image label to display the new image
+            self.image_label.configure(image=photo)
+            self.image_label.image = photo  # Keep a reference
         else:
-            print("Please load an image first.")
-            
+             print("Please load an image first.")
+       
     def apply_mean_filter(self):
         if self.image is not None:
             # Convert the image to a numpy array
-            image_np = np.array(self.image)
-
+            image_np = np.array(self.image)    
             # Apply a mean filter to the image
-            mean_filtered_image = cv2.blur(image_np, (5, 5))
-
-            # Display the mean filtered image
-            plt.imshow(cv2.cvtColor(mean_filtered_image, cv2.COLOR_BGR2RGB))
-            plt.title('Mean Filtered Image')
-            plt.axis('off')
-            plt.show()
+            mean_filtered_image = cv2.blur(image_np, (5, 5))   
+            # Convert the mean filtered image to a PIL Image
+            pil_image = Image.fromarray(cv2.cvtColor(mean_filtered_image, cv2.COLOR_BGR2RGB))  
+            # Convert the PIL Image to a Tkinter PhotoImage
+            photo = ImageTk.PhotoImage(pil_image)  
+            # Configure the image label to display the new image
+            self.image_label.configure(image=photo)
+            self.image_label.image = photo  # Keep a reference
         else:
             print("Please load an image first.")
 
@@ -115,11 +74,22 @@ class imag_processing:
             # Apply a median filter to the image
             median_filtered_image = cv2.medianBlur(image_np, 5)
 
-            # Display the median filtered image
+            # Convert the median filtered image to a PIL Image
+            pil_image = Image.fromarray(cv2.cvtColor(median_filtered_image, cv2.COLOR_BGR2RGB))
 
-            plt.imshow(cv2.cvtColor(median_filtered_image, cv2.COLOR_BGR2RGB))
-            plt.title('Median Filtered Image')
-            plt.axis('off')
-            plt.show()
+            # Convert the PIL Image to a Tkinter PhotoImage
+            photo = ImageTk.PhotoImage(pil_image)
+
+            # Configure the image label to display the new image
+            self.image_label.configure(image=photo)
+            self.image_label.image = photo  # Keep a reference
         else:
             print("Please load an image first.")
+
+if __name__=="__main__":
+    root = Tk()
+    root.geometry("800x600")
+    Filter=Filter(root)
+ 
+    
+    root.mainloop()
