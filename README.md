@@ -34,9 +34,9 @@ https://github.com/OsamaRab3/Image-Processing/assets/159753803/9bd1338b-b100-484
   - Hough Transform for circle detection
 
 ## Installation
-1. Clone the repository: `git clone https://github.com/OsamaRabe3/image-processing-project.git`
+1. Clone the repository: `git clone https://github.com/OsamaRab3/Image-Processing.git `
 2. Install the required dependencies: `pip install -r requirements.txt`
-3. Run the application: `python main.py`
+3. Run the application: `python Filters.py`
 
 ## Usage
 1. Launch the application.
